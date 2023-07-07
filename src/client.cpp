@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
         std::cout << "Please enter the number of cycles: ";
         std::cin >> numOfCycles;
 
-        //cin игнорирует символы пробела и оставляет их в потоке как мусор, поэтому нужно проионорировать этот мусор
+        //cin игнорирует символы пробела и оставляет их в потоке как мусор, поэтому нужно проигнорировать этот мусор
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         char request[max_length] = "";

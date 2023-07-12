@@ -9,7 +9,6 @@ enum { max_length = 1024 };
 
 int main(int argc, char* argv[])
 {
-    //system("chcp 625001");
     try
     {
 

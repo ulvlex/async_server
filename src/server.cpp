@@ -14,7 +14,13 @@ public:
     session(tcp::socket socket, size_t connectedClient) //конструктор принимает сокет (IP, Port)
         : socket_(std::move(socket)), connectedClient_(connectedClient)
     {
+        std::cout << "connection established: " << connectedClient_ << std::endl;
     }
+
+    ~session() {
+        std::cout << "connection lost " << connectedClient_ << std::endl;
+    }
+
 
     void start() //метод запускает асинхронное чтение
     {
@@ -32,9 +38,6 @@ private:
                 {
                     do_write(length); //асинхронная запись данных 
                 }
-                else {
-                    std::cout << "connection lost " << connectedClient_ << std::endl;
-                }
             });
     }
 
@@ -47,9 +50,6 @@ private:
                 if (!ec) //после успешной записи снова идёт чтение из сокета
                 {
                     do_read();
-                }
-                else {
-                    std::cout << "connection lost " << connectedClient_ << std::endl;
                 }
             });
     }
@@ -78,7 +78,6 @@ private:
             {
                 if (!ec) //если подключение принято успешно, создаётся новый объект сессии и начинается обмен данными с клиентом 
                 {
-                    std::cout << "connection established: " << connectedClient << std::endl;
                     std::make_shared<session>(std::move(socket), connectedClient)->start();
                     ++connectedClient;
                 }
@@ -93,7 +92,6 @@ private:
 
 int main(int argc, char* argv[])
 {
-    system("chcp 1251");
     try
     {
         if (argc != 2) //аргумент командной строки - порт

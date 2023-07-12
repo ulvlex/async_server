@@ -93,6 +93,7 @@ private:
 
 int main(int argc, char* argv[])
 {
+    system("chcp 1251");
     try
     {
         if (argc != 2) //аргумент командной строки - порт

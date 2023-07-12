@@ -9,6 +9,7 @@ enum { max_length = 1024 };
 
 int main(int argc, char* argv[])
 {
+    system("chcp 1251");
     try
     {
 

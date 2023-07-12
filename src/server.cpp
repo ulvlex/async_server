@@ -25,8 +25,7 @@ private:
     void do_read()
     {
         auto self(shared_from_this());
-        socket_.async_read_some(boost::asio::buffer(data_, max_length), //читаем в буфер, захватываем в лямбду
-            //обработчика завершающий указатель на разделяемую копию себя, 
+        socket_.async_read_some(boost::asio::buffer(data_, max_length), //читаем в буфер, захватываем в лямбду обработчика завершающий указатель на разделяемую копию себя 
             [this, self](boost::system::error_code ec, std::size_t length)
             {
                 if (!ec)

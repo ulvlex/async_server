@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.26 FATAL_ERROR)
 
 project(async_server)
 
+add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
 set (BOOST_ROOT /boost_1_82_0) # Путь к библиотеке Boost
 
 #set (CMAKE_CXX_STANDARD 19) 

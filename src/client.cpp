@@ -1,4 +1,4 @@
-#include <cstdlib>
+п»ї#include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <boost/asio.hpp>
@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
     try
     {
 
-        if (argc != 3) //в начале задаются аргументы командной строки: хост и порт, с учётом нулевого аргумента - путь файла, получается 3 аргумента, если не равно трём, то значит не заданы какие-то параметры, или задано слишком много
+        if (argc != 3) //РІ РЅР°С‡Р°Р»Рµ Р·Р°РґР°СЋС‚СЃСЏ Р°СЂРіСѓРјРµРЅС‚С‹ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё: С…РѕСЃС‚ Рё РїРѕСЂС‚, СЃ СѓС‡С‘С‚РѕРј РЅСѓР»РµРІРѕРіРѕ Р°СЂРіСѓРјРµРЅС‚Р° - РїСѓС‚СЊ С„Р°Р№Р»Р°, РїРѕР»СѓС‡Р°РµС‚СЃСЏ 3 Р°СЂРіСѓРјРµРЅС‚Р°, РµСЃР»Рё РЅРµ СЂР°РІРЅРѕ С‚СЂС‘Рј, С‚Рѕ Р·РЅР°С‡РёС‚ РЅРµ Р·Р°РґР°РЅС‹ РєР°РєРёРµ-С‚Рѕ РїР°СЂР°РјРµС‚СЂС‹, РёР»Рё Р·Р°РґР°РЅРѕ СЃР»РёС€РєРѕРј РјРЅРѕРіРѕ
         {
             std::cerr << "Usage: blocking_tcp_echo_client <host> <port>\n";
             return 1;
@@ -25,31 +25,31 @@ int main(int argc, char* argv[])
         std::cout << "Please enter the number of cycles: ";
         std::cin >> numOfCycles;
 
-        //cin игнорирует символы пробела и оставляет их в потоке как мусор, поэтому нужно проигнорировать это
+        //cin РёРіРЅРѕСЂРёСЂСѓРµС‚ СЃРёРјРІРѕР»С‹ РїСЂРѕР±РµР»Р° Рё РѕСЃС‚Р°РІР»СЏРµС‚ РёС… РІ РїРѕС‚РѕРєРµ РєР°Рє РјСѓСЃРѕСЂ, РїРѕСЌС‚РѕРјСѓ РЅСѓР¶РЅРѕ РїСЂРѕРёРіРЅРѕСЂРёСЂРѕРІР°С‚СЊ СЌС‚Рѕ
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         char request[max_length] = "";
         char reply[max_length] = "";
 
-        for (int i = 0; i < numOfThreads; ++i) { //запросы каждого клиента
+        for (int i = 0; i < numOfThreads; ++i) { //Р·Р°РїСЂРѕСЃС‹ РєР°Р¶РґРѕРіРѕ РєР»РёРµРЅС‚Р°
 
-            // одно подключение для одного клиента
+            // РѕРґРЅРѕ РїРѕРґРєР»СЋС‡РµРЅРёРµ РґР»СЏ РѕРґРЅРѕРіРѕ РєР»РёРµРЅС‚Р°
             boost::asio::io_context io_context;
 
             tcp::socket s(io_context);
-            tcp::resolver resolver(io_context); //объект resolver, который исользуется для разрешения имени хоста и порта
-            boost::asio::connect(s, resolver.resolve(argv[1], argv[2])); //устаналивает соединение с удалённым сервером, используя разрешённые значения хоста и порта
+            tcp::resolver resolver(io_context); //РѕР±СЉРµРєС‚ resolver, РєРѕС‚РѕСЂС‹Р№ РёСЃРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ СЂР°Р·СЂРµС€РµРЅРёСЏ РёРјРµРЅРё С…РѕСЃС‚Р° Рё РїРѕСЂС‚Р°
+            boost::asio::connect(s, resolver.resolve(argv[1], argv[2])); //СѓСЃС‚Р°РЅР°Р»РёРІР°РµС‚ СЃРѕРµРґРёРЅРµРЅРёРµ СЃ СѓРґР°Р»С‘РЅРЅС‹Рј СЃРµСЂРІРµСЂРѕРј, РёСЃРїРѕР»СЊР·СѓСЏ СЂР°Р·СЂРµС€С‘РЅРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ С…РѕСЃС‚Р° Рё РїРѕСЂС‚Р°
 
-            for (int j = 0; j < numOfCycles; ++j) { //запросы одного единственного клиента в данный момент сессии
+            for (int j = 0; j < numOfCycles; ++j) { //Р·Р°РїСЂРѕСЃС‹ РѕРґРЅРѕРіРѕ РµРґРёРЅСЃС‚РІРµРЅРЅРѕРіРѕ РєР»РёРµРЅС‚Р° РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ СЃРµСЃСЃРёРё
                 std::cout << "Enter message: ";
 
-                std::cin.getline(request, max_length); //ввод сообщения от пользователя
+                std::cin.getline(request, max_length); //РІРІРѕРґ СЃРѕРѕР±С‰РµРЅРёСЏ РѕС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
                 size_t request_length = std::strlen(request);
-                boost::asio::write(s, boost::asio::buffer(request, request_length)); //запись сообщения в буфер для передачи данных 
+                boost::asio::write(s, boost::asio::buffer(request, request_length)); //Р·Р°РїРёСЃСЊ СЃРѕРѕР±С‰РµРЅРёСЏ РІ Р±СѓС„РµСЂ РґР»СЏ РїРµСЂРµРґР°С‡Рё РґР°РЅРЅС‹С… 
 
 
                 size_t reply_length = boost::asio::read(s,
-                    boost::asio::buffer(reply, request_length)); //ответ от сервера, который считывается из сокета 
+                    boost::asio::buffer(reply, request_length)); //РѕС‚РІРµС‚ РѕС‚ СЃРµСЂРІРµСЂР°, РєРѕС‚РѕСЂС‹Р№ СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ РёР· СЃРѕРєРµС‚Р° 
                 std::cout << "Reply is: ";
                 std::cout.write(reply, reply_length);
                 std::cout << "\n";

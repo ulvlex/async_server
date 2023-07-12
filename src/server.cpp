@@ -1,4 +1,4 @@
-#include <cstdlib>
+п»ї#include <cstdlib>
 #include <iostream>
 #include <memory>
 #include <utility>
@@ -7,30 +7,30 @@
 
 using boost::asio::ip::tcp;
 
-class session //сессия обмена данными с клиентом
+class session //СЃРµСЃСЃРёСЏ РѕР±РјРµРЅР° РґР°РЅРЅС‹РјРё СЃ РєР»РёРµРЅС‚РѕРј
     : public std::enable_shared_from_this<session>
 {
 public:
-    session(tcp::socket socket, size_t connectedClient) //конструктор принимает сокет (IP, Port)
+    session(tcp::socket socket, size_t connectedClient) //РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїСЂРёРЅРёРјР°РµС‚ СЃРѕРєРµС‚ (IP, Port)
         : socket_(std::move(socket)), connectedClient_(connectedClient)
     {
     }
 
-    void start() //метод запускает асинхронное чтение
+    void start() //РјРµС‚РѕРґ Р·Р°РїСѓСЃРєР°РµС‚ Р°СЃРёРЅС…СЂРѕРЅРЅРѕРµ С‡С‚РµРЅРёРµ
     {
-        do_read(); //асинхронное чтение
+        do_read(); //Р°СЃРёРЅС…СЂРѕРЅРЅРѕРµ С‡С‚РµРЅРёРµ
     }
 
 private:
     void do_read()
     {
         auto self(shared_from_this());
-        socket_.async_read_some(boost::asio::buffer(data_, max_length), //читаем в буфер, захватываем в лямбду обработчика завершающий указатель на разделяемую копию себя 
+        socket_.async_read_some(boost::asio::buffer(data_, max_length), //С‡РёС‚Р°РµРј РІ Р±СѓС„РµСЂ, Р·Р°С…РІР°С‚С‹РІР°РµРј РІ Р»СЏРјР±РґСѓ РѕР±СЂР°Р±РѕС‚С‡РёРєР° Р·Р°РІРµСЂС€Р°СЋС‰РёР№ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЂР°Р·РґРµР»СЏРµРјСѓСЋ РєРѕРїРёСЋ СЃРµР±СЏ 
             [this, self](boost::system::error_code ec, std::size_t length)
             {
                 if (!ec)
                 {
-                    do_write(length); //асинхронная запись данных 
+                    do_write(length); //Р°СЃРёРЅС…СЂРѕРЅРЅР°СЏ Р·Р°РїРёСЃСЊ РґР°РЅРЅС‹С… 
                 }
                 else {
                     std::cout << "connection lost " << connectedClient_ << std::endl;
@@ -41,10 +41,10 @@ private:
     void do_write(std::size_t length)
     {
         auto self(shared_from_this());
-        boost::asio::async_write(socket_, boost::asio::buffer(data_, length), //асинхронная запись данныз в сокет
+        boost::asio::async_write(socket_, boost::asio::buffer(data_, length), //Р°СЃРёРЅС…СЂРѕРЅРЅР°СЏ Р·Р°РїРёСЃСЊ РґР°РЅРЅС‹Р· РІ СЃРѕРєРµС‚
             [this, self](boost::system::error_code ec, std::size_t /*length*/)
             {
-                if (!ec) //после успешной записи снова идёт чтение из сокета
+                if (!ec) //РїРѕСЃР»Рµ СѓСЃРїРµС€РЅРѕР№ Р·Р°РїРёСЃРё СЃРЅРѕРІР° РёРґС‘С‚ С‡С‚РµРЅРёРµ РёР· СЃРѕРєРµС‚Р°
                 {
                     do_read();
                 }
@@ -64,10 +64,10 @@ class server
 {
 public:
     server(boost::asio::io_context& io_context, short port)
-        : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)), //объект ассептор, который используется для прослушивания подключений на указанном порту
+        : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)), //РѕР±СЉРµРєС‚ Р°СЃСЃРµРїС‚РѕСЂ, РєРѕС‚РѕСЂС‹Р№ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РїСЂРѕСЃР»СѓС€РёРІР°РЅРёСЏ РїРѕРґРєР»СЋС‡РµРЅРёР№ РЅР° СѓРєР°Р·Р°РЅРЅРѕРј РїРѕСЂС‚Сѓ
         connectedClient(1)
     {
-        do_accept(); //асинхронное принимает входящее подключение на указ. порту
+        do_accept(); //Р°СЃРёРЅС…СЂРѕРЅРЅРѕРµ РїСЂРёРЅРёРјР°РµС‚ РІС…РѕРґСЏС‰РµРµ РїРѕРґРєР»СЋС‡РµРЅРёРµ РЅР° СѓРєР°Р·. РїРѕСЂС‚Сѓ
     }
 
 private:
@@ -76,14 +76,14 @@ private:
         acceptor_.async_accept(
             [this](boost::system::error_code ec, tcp::socket socket)
             {
-                if (!ec) //если подключение принято успешно, создаётся новый объект сессии и начинается обмен данными с клиентом 
+                if (!ec) //РµСЃР»Рё РїРѕРґРєР»СЋС‡РµРЅРёРµ РїСЂРёРЅСЏС‚Рѕ СѓСЃРїРµС€РЅРѕ, СЃРѕР·РґР°С‘С‚СЃСЏ РЅРѕРІС‹Р№ РѕР±СЉРµРєС‚ СЃРµСЃСЃРёРё Рё РЅР°С‡РёРЅР°РµС‚СЃСЏ РѕР±РјРµРЅ РґР°РЅРЅС‹РјРё СЃ РєР»РёРµРЅС‚РѕРј 
                 {
                     std::cout << "connection established: " << connectedClient << std::endl;
                     std::make_shared<session>(std::move(socket), connectedClient)->start();
                     ++connectedClient;
                 }
 
-                do_accept(); //вызывается снова, чтобы ожидать следующего подключения
+                do_accept(); //РІС‹Р·С‹РІР°РµС‚СЃСЏ СЃРЅРѕРІР°, С‡С‚РѕР±С‹ РѕР¶РёРґР°С‚СЊ СЃР»РµРґСѓСЋС‰РµРіРѕ РїРѕРґРєР»СЋС‡РµРЅРёСЏ
             });
     }
 
@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
     system("chcp 1251");
     try
     {
-        if (argc != 2) //аргумент командной строки - порт
+        if (argc != 2) //Р°СЂРіСѓРјРµРЅС‚ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё - РїРѕСЂС‚
         {
             std::cerr << "Usage: async_tcp_echo_server <port>\n";
             return 1;
@@ -104,9 +104,9 @@ int main(int argc, char* argv[])
 
         boost::asio::io_context io_context;
 
-        server s(io_context, std::atoi(argv[1])); //передаётся порт
+        server s(io_context, std::atoi(argv[1])); //РїРµСЂРµРґР°С‘С‚СЃСЏ РїРѕСЂС‚
 
-        io_context.run(); //метод run объекта io_context запускает цикл обработки событий, который продолжается, пока есть активные асинхронные операции
+        io_context.run(); //РјРµС‚РѕРґ run РѕР±СЉРµРєС‚Р° io_context Р·Р°РїСѓСЃРєР°РµС‚ С†РёРєР» РѕР±СЂР°Р±РѕС‚РєРё СЃРѕР±С‹С‚РёР№, РєРѕС‚РѕСЂС‹Р№ РїСЂРѕРґРѕР»Р¶Р°РµС‚СЃСЏ, РїРѕРєР° РµСЃС‚СЊ Р°РєС‚РёРІРЅС‹Рµ Р°СЃРёРЅС…СЂРѕРЅРЅС‹Рµ РѕРїРµСЂР°С†РёРё
     }
     catch (std::exception& e)
     {
